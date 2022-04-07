@@ -9,7 +9,7 @@ with open("phonebook_raw.csv", encoding='utf-8') as f:
 # Поместить Фамилию, Имя и Отчество человека в поля lastname, firstname и surname соответственно.
 #В записной книжке изначально может быть Ф + ИО, ФИО, а может быть сразу правильно: Ф+И+О;
 
-pattern = r'^(\b[А-ЯЁа-яё]*)(\s*)(\,?)(\b[А-ЯЁа-яё]*)(\s*)(\,?)(\b[А-ЯЁа-яё]*)(\,?)(\,?)(\,?)'
+pattern = r'^([А-ЯЁа-яё]+)(\s*)(\,?)([А-ЯЁа-яё]+)(\s*)(\,?)([А-ЯЁа-яё]*)(\,?)(\,?)(\,?)'
 new_pattern = r'\1\3\10\4\6\9\7\8'
 new_contact_list = list()
 
@@ -36,14 +36,11 @@ for phone in new_contact_list:
 
 # pprint(new_contact_list2)
 
+
 # Объединить все дублирующиеся записи о человеке в одну
 for contact in new_contact_list2:
-    f_name = contact[0]
-    l_name = contact[1]
     for new_contact in new_contact_list2:
-        new_f_name = new_contact[0]
-        new_l_name = new_contact[1]
-        if f_name == new_f_name and l_name == new_l_name:
+        if contact[0] == new_contact[0] and contact[1] == new_contact[1] and contact is not new_contact:
             if contact[2] == "":
                 contact[2] = new_contact[2]
             if contact[3] == "":
@@ -54,12 +51,12 @@ for contact in new_contact_list2:
                 contact[5] = new_contact[5]
             if contact[6] == "":
                 contact[6] = new_contact[6]
+                del new_contact[7:]
 
-    result_list = list()
-    for i in new_contact_list2:
-        if i not in result_list:
-            result_list.append(i)
-
+result_list = list()
+for d in new_contact_list2:
+    if d not in result_list:
+        result_list.append(d)
 pprint(result_list)
 
 
